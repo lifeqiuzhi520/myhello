@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    tools:context="com.camera.www.camera.MainActivity">
+    <FrameLayout
+        android:minHeight="230dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_main_activity"
+        android:orientation="vertical">
+
+        <ImageView
+            android:paddingTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/menu_slogan" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="47dp"
+            android:layout_marginRight="47dp">
+
+            <TextView
+                android:id="@+id/take_picture"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="left"
+                android:background="@drawable/ic_home_menu_camera"
+                android:gravity="center_horizontal"
+                android:paddingTop="90dp"
+                android:text="@string/pai_zhao"
+                android:textColor="@color/color_c1b6be"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/photo"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="right"
+                android:background="@drawable/ic_home_menu_album"
+                android:gravity="center_horizontal"
+                android:paddingTop="90dp"
+                android:text="@string/xiang_ce"
+                android:textColor="@color/color_c1b6be"
+                android:textSize="17sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:minHeight="60dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/field_guide"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:background="@color/color_ff46a4"
+                android:gravity="center"
+                android:text="@string/tu_jian"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/menu_btn_text_size" />
+
+            <TextView
+                android:id="@+id/puzzle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@color/color_ff46a4"
+                android:gravity="center"
+                android:text="@string/pin_tu"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/menu_btn_text_size" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/scan_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_fe99e7"
+            android:gravity="center"
+            android:minHeight="60dp"
+            android:text="@string/sao_miao_ka_pai"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/menu_btn_text_size" />
+    </LinearLayout>
+
+</LinearLayout>
