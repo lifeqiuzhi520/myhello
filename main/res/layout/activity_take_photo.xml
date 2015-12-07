@@ -50,37 +50,37 @@
                 android:id="@+id/water_mark1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_01_s"/>
+                android:src="@drawable/water_mark_01"/>
 
             <ImageView
                 android:id="@+id/water_mark2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_02_s"/>
+                android:src="@drawable/water_mark_02"/>
 
             <ImageView
                 android:id="@+id/water_mark3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_03_s"/>
+                android:src="@drawable/water_mark_03"/>
 
             <ImageView
                 android:id="@+id/water_mark4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_04_s"/>
+                android:src="@drawable/water_mark_04"/>
 
             <ImageView
                 android:id="@+id/water_mark5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_05_s"/>
+                android:src="@drawable/water_mark_05"/>
 
             <ImageView
                 android:id="@+id/water_mark6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_06_s"/>
+                android:src="@drawable/water_mark_06"/>
 
             <ImageView
                 android:id="@+id/water_mark7"
@@ -92,7 +92,7 @@
                 android:id="@+id/water_mark8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/water_mark_08_s"/>
+                android:src="@drawable/water_mark_08"/>
 
             <ImageView
                 android:id="@+id/water_mark9"
