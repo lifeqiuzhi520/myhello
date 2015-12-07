@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.camera.www.camera.activity.activity.TakePhotoAct;
 import com.camera.www.camera.custom_view.PointIndicateView;
 
 public class MainActivity extends BaseAct implements View.OnClickListener {
@@ -45,6 +46,7 @@ public class MainActivity extends BaseAct implements View.OnClickListener {
      * 拍照
      */
     private void startTakePhoto() {
+        startActivity(TakePhotoAct.class);
 
     }
 

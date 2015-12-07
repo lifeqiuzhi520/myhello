@@ -1,5 +1,6 @@
 package com.camera.www.camera;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -17,5 +18,10 @@ public class BaseAct extends FragmentActivity {
     public <T extends View> T findView(int resId) {
         return (T) findViewById(resId);
 
+    }
+    protected   void startActivity(Class<?> cls) {
+
+        Intent intent = new Intent(this, cls);
+        getApplicationContext().startActivity(intent);
     }
 }
