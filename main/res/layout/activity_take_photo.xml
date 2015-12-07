@@ -9,7 +9,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="10dp"
         android:gravity="right|center_vertical"
         android:paddingRight="18dp">
 
@@ -34,13 +34,13 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/header">
 
         <LinearLayout
             android:id="@+id/water_mark_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_water_mark_selector"
             android:divider="@drawable/divider_hori"
             android:minWidth="66dp"
             android:orientation="vertical"
@@ -48,56 +48,47 @@
 
             <ImageView
                 android:id="@+id/water_mark1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_01"/>
 
             <ImageView
                 android:id="@+id/water_mark2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_02"/>
 
             <ImageView
                 android:id="@+id/water_mark3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_03"/>
 
             <ImageView
                 android:id="@+id/water_mark4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_04"/>
 
             <ImageView
                 android:id="@+id/water_mark5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_05"/>
 
             <ImageView
                 android:id="@+id/water_mark6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_06"/>
 
             <ImageView
                 android:id="@+id/water_mark7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_default"/>
 
             <ImageView
                 android:id="@+id/water_mark8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_08"/>
 
             <ImageView
                 android:id="@+id/water_mark9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_empty"/>
         </LinearLayout>
     </ScrollView>
@@ -107,72 +98,64 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginRight="27dp"
+        android:layout_marginLeft="27dp"
         android:gravity="center_vertical"
+        android:layout_marginBottom="6dp"
         android:orientation="horizontal">
 
-        <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            />
+
 
         <ImageView
             android:id="@+id/bright_ajust"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/bright"/>
 
         <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             />
 
         <ImageView
             android:id="@+id/toggle_shot"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/toggle_shot"/>
 
         <Space
-            android:layout_width="20px"
+            android:layout_width="0px"
             android:layout_height="20px"
-            />
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/take_picture"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/icon_camera_take_selector"/>
+            android:background="@drawable/icon_camera_take_selector"/>
 
         <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/photo_frame"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/icon_photo_frame"/>
 
         <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            />
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/group_photo"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/icon_group_photo"/>
 
-        <Space
-            android:layout_width="20px"
-            android:layout_height="20px"
-            />
     </LinearLayout>
 </RelativeLayout>
