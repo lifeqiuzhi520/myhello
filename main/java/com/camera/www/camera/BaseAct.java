@@ -22,6 +22,7 @@ public class BaseAct extends FragmentActivity {
     protected   void startActivity(Class<?> cls) {
 
         Intent intent = new Intent(this, cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
     }
 }
