@@ -34,7 +34,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
+        android:scrollbars="none"
+        android:animateLayoutChanges="true"
         android:layout_below="@+id/header">
 
         <LinearLayout
@@ -72,6 +74,10 @@
                 android:src="@drawable/water_mark_05"/>
 
             <ImageView
+                android:id="@+id/water_mark8"
+                style="@style/WaterMarkTheme"
+                android:src="@drawable/water_mark_08"/>
+            <ImageView
                 android:id="@+id/water_mark6"
                 style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_06"/>
@@ -81,10 +87,7 @@
                 style="@style/WaterMarkTheme"
                 android:src="@drawable/water_mark_default"/>
 
-            <ImageView
-                android:id="@+id/water_mark8"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_08"/>
+
 
             <ImageView
                 android:id="@+id/water_mark9"
