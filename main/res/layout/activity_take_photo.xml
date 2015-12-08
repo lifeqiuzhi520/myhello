@@ -1,164 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_c1b6be"
-                android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    >
+
+    <SurfaceView
+        android:id="@+id/suface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <RelativeLayout
-        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="right|center_vertical"
-        android:paddingRight="18dp">
-
-        <ImageView
-            android:id="@+id/toggle_flash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_flash_light_selector"/>
-
-        <ImageView
-            android:id="@+id/toggle_water_mark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/toggle_flash"
-            android:src="@drawable/mark"/>
-
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="6dp"
-        android:scrollbars="none"
-        android:animateLayoutChanges="true"
-        android:layout_below="@+id/header">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/water_mark_container"
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="right|center_vertical"
+            android:paddingRight="18dp">
+
+            <ImageView
+                android:id="@+id/toggle_flash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_flash_light_selector"/>
+
+            <ImageView
+                android:id="@+id/toggle_water_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/toggle_flash"
+                android:src="@drawable/mark"/>
+
+        </RelativeLayout>
+
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:divider="@drawable/divider_hori"
-            android:minWidth="66dp"
-            android:orientation="vertical"
-            android:showDividers="middle">
+            android:layout_above="@+id/bottom"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/header"
+            android:layout_marginTop="6dp"
+            android:animateLayoutChanges="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/water_mark_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:divider="@drawable/divider_hori"
+                android:minWidth="66dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <ImageView
+                    android:id="@+id/water_mark1"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_01"/>
+
+                <ImageView
+                    android:id="@+id/water_mark2"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_02"/>
+
+                <ImageView
+                    android:id="@+id/water_mark3"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_03"/>
+
+                <ImageView
+                    android:id="@+id/water_mark4"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_04"/>
+
+                <ImageView
+                    android:id="@+id/water_mark5"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_05"/>
+
+                <ImageView
+                    android:id="@+id/water_mark8"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_08"/>
+
+                <ImageView
+                    android:id="@+id/water_mark6"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_06"/>
+
+                <ImageView
+                    android:id="@+id/water_mark7"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_default"/>
+
+
+                <ImageView
+                    android:id="@+id/water_mark9"
+                    style="@style/WaterMarkTheme"
+                    android:src="@drawable/water_mark_empty"/>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="27dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
 
             <ImageView
-                android:id="@+id/water_mark1"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_01"/>
+                android:id="@+id/bright_ajust"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bright"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
 
             <ImageView
-                android:id="@+id/water_mark2"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_02"/>
+                android:id="@+id/toggle_shot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/toggle_shot"/>
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="20px"
+                android:layout_weight="1"/>
 
             <ImageView
-                android:id="@+id/water_mark3"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_03"/>
+                android:id="@+id/take_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/icon_camera_take_selector"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
             <ImageView
-                android:id="@+id/water_mark4"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_04"/>
+                android:id="@+id/photo_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_photo_frame"/>
+
+            <Space
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
 
             <ImageView
-                android:id="@+id/water_mark5"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_05"/>
+                android:id="@+id/group_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_group_photo"/>
 
-            <ImageView
-                android:id="@+id/water_mark8"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_08"/>
-            <ImageView
-                android:id="@+id/water_mark6"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_06"/>
-
-            <ImageView
-                android:id="@+id/water_mark7"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_default"/>
-
-
-
-            <ImageView
-                android:id="@+id/water_mark9"
-                style="@style/WaterMarkTheme"
-                android:src="@drawable/water_mark_empty"/>
         </LinearLayout>
-    </ScrollView>
+    </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="27dp"
-        android:layout_marginLeft="27dp"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="6dp"
-        android:orientation="horizontal">
-
-
-
-        <ImageView
-            android:id="@+id/bright_ajust"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/bright"/>
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            />
-
-        <ImageView
-            android:id="@+id/toggle_shot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/toggle_shot"/>
-
-        <Space
-            android:layout_width="0px"
-            android:layout_height="20px"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:id="@+id/take_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/icon_camera_take_selector"/>
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:id="@+id/photo_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_photo_frame"/>
-
-        <Space
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:id="@+id/group_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_group_photo"/>
-
-    </LinearLayout>
-</RelativeLayout>
+</FrameLayout>
