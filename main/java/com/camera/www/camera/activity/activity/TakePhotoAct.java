@@ -2,6 +2,8 @@ package com.camera.www.camera.activity.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -51,10 +53,12 @@ public class TakePhotoAct extends BaseAct {
                 Log.d(TAG, "Error creating media file, check storage permissions: ");
                 return;
             }
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
             try {
                 FileOutputStream fos = new FileOutputStream(mPhotoFile);
-                fos.write(data);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);//
+                fos.flush();
                 fos.close();
                 Log.d(TAG, "save picture success");
                 //notify
