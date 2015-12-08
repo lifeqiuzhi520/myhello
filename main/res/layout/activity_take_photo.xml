@@ -131,6 +131,7 @@
 
             <ImageView
                 android:id="@+id/toggle_shot"
+                android:onClick="toggleCamera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/toggle_shot"/>
@@ -142,6 +143,7 @@
 
             <ImageView
                 android:id="@+id/take_picture"
+                android:onClick="onPhotoClicked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/icon_camera_take_selector"/>

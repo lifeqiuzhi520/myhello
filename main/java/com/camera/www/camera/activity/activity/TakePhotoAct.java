@@ -37,6 +37,10 @@ public class TakePhotoAct extends BaseAct {
     private boolean mIsRecording = false;
     private MediaRecorder mMediaRecorder;
     private File mPhotoFile;
+    private int mCameraCount = 0;
+    private SurfaceHolder.Callback mCallback;
+
+    private int mCurrentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
         @Override
@@ -66,7 +70,8 @@ public class TakePhotoAct extends BaseAct {
                             Uri.parse("file://"
                                     + Environment.getExternalStorageDirectory())));
                 }
-                mCamera.reconnect();
+                releaseCamera();
+                initPreview();
             } catch (FileNotFoundException e) {
                 Log.d(TAG, "File not found: " + e.getMessage());
             } catch (IOException e) {
@@ -74,6 +79,52 @@ public class TakePhotoAct extends BaseAct {
             }
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_take_photo);
+        mCameraCount = Camera.getNumberOfCameras();
+        mSurfaceView = (SurfaceView) findViewById(R.id.suface_view);
+        mSurfaceHolder = mSurfaceView.getHolder();
+        mCallback = new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                initPreview();
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                                       int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                releaseCamera();
+            }
+        };
+        mSurfaceHolder.addCallback(mCallback);
+    }
+
+    protected void initPreview() {
+        mCamera = Camera.open(mCurrentCameraId);
+        try {
+            mCamera.setPreviewDisplay(mSurfaceHolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setCameraDisplayOrientation(this, mCurrentCameraId, mCamera);
+        mCamera.startPreview();
+    }
+
+    protected void releaseCamera() {
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+    }
 
     public static void setCameraDisplayOrientation(Activity activity,
                                                    int cameraId, android.hardware.Camera camera) {
@@ -108,47 +159,22 @@ public class TakePhotoAct extends BaseAct {
         camera.setDisplayOrientation(result);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_take_photo);
-        mSurfaceView = (SurfaceView) findViewById(R.id.suface_view);
-//        mSurfaceView = new SurfaceView(this);
-//        setContentView(mSurfaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mSurfaceHolder = mSurfaceView.getHolder();
-        mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                releaseCamera();
-            }
-
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                initPreview();
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                                       int height) {
-
-            }
-        });
-    }
-
-
-    protected void initPreview() {
-        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
-        try {
-            mCamera.setPreviewDisplay(mSurfaceHolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setCameraDisplayOrientation(this, Camera.CameraInfo.CAMERA_FACING_BACK, mCamera);
-        mCamera.startPreview();
-    }
-
     public void onPhotoClicked(View view) {
         mCamera.takePicture(null, null, mPicture);
+    }
+
+    public void toggleCamera(View view) {
+
+        if (mCameraCount == 2) {
+            releaseCamera();
+            mCurrentCameraId = (mCurrentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK ? Camera
+                    .CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
+            initPreview();
+
+        } else {
+            return;
+        }
+
     }
 
     private File getOutputMediaFile(int type) {
@@ -179,14 +205,6 @@ public class TakePhotoAct extends BaseAct {
         }
 
         return mediaFile;
-    }
-
-    protected void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
     }
 
     @Override
