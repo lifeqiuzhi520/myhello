@@ -9,14 +9,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-<com.camera.www.camera.custom_view.BrightAjustView
-    android:layout_gravity="bottom"
-    android:layout_marginBottom="90dp"
-    android:layout_marginRight="25dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    <FrameLayout
+        android:id="@+id/bright_ajust_container"
+        android:layout_width="wrap_content"
+        android:layout_height="225dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="27dp"
+        android:background="@drawable/light_ajust">
 
-</com.camera.www.camera.custom_view.BrightAjustView>
+
+        <ScrollView
+            android:id="@+id/bright_scroll_view"
+            android:layout_width="30dp"
+            android:layout_height="225dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="193dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ajust_bright_dot"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="193dp"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/auto_focus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/camera_focus_normal"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -78,6 +116,7 @@
                 android:id="@+id/bright_ajust"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="toggleBrightAjust"
                 android:src="@drawable/bright"/>
 
             <Space

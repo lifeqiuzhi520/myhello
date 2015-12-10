@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import com.camera.www.camera.BaseAct;
 import com.camera.www.camera.R;
@@ -51,6 +53,10 @@ public class TakePhotoAct extends BaseAct {
     private ImageView mToggleFlash;
     private int mWaterResIds[];
     private ListView mWaterListView;
+    private View mBrightJustContainer;
+    private ScrollView mScrollView;
+    private ImageView mAutoFocusView;
+
 
     private int mCurrentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
@@ -112,7 +118,6 @@ public class TakePhotoAct extends BaseAct {
                 mWaterListView.setVisibility(View.GONE);
             }
         });
-
     }
 
     private void initData() {
@@ -174,6 +179,9 @@ public class TakePhotoAct extends BaseAct {
 
     private void initViews() {
         mWaterListView = findView(R.id.water_list_view);
+        mAutoFocusView = findView(R.id.auto_focus);
+        mBrightJustContainer = findView(R.id.bright_ajust_container);
+        mScrollView = findView(R.id.bright_scroll_view);
         mCameraCount = Camera.getNumberOfCameras();
         mSurfaceView = (SurfaceView) findViewById(R.id.suface_view);
         mSurfaceHolder = mSurfaceView.getHolder();
@@ -200,8 +208,25 @@ public class TakePhotoAct extends BaseAct {
     }
 
 
+    private void addFocus() {
+        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                initCamera();
+            }
+        });
+    }
+
+    private void initCamera() {
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setPictureFormat(ImageFormat.JPEG);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        mCamera.setParameters(parameters);
+    }
+
     protected void initPreview() {
         mCamera = Camera.open(mCurrentCameraId);
+        initCamera();
         try {
             mCamera.setPreviewDisplay(mSurfaceHolder);
         } catch (IOException e) {
@@ -209,6 +234,7 @@ public class TakePhotoAct extends BaseAct {
         }
         setCameraDisplayOrientation(this, mCurrentCameraId, mCamera);
         mCamera.startPreview();
+        mCamera.cancelAutoFocus();
     }
 
     protected void releaseCamera() {
@@ -278,6 +304,18 @@ public class TakePhotoAct extends BaseAct {
     public void toggleBright(View view) {
         toggleBright(mCamera);
 
+
+    }
+
+    /**
+     * 打开或者关闭亮度调整器
+     *
+     * @param view
+     */
+
+    public void toggleBrightAjust(View view) {
+        int visibility = mBrightJustContainer.getVisibility();
+        mBrightJustContainer.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
 
     }
 
