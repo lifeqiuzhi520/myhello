@@ -11,11 +11,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.camera.www.camera.BaseAct;
 import com.camera.www.camera.R;
@@ -26,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class TakePhotoAct extends BaseAct {
 
@@ -41,6 +48,9 @@ public class TakePhotoAct extends BaseAct {
     private File mPhotoFile;
     private int mCameraCount = 0;
     private SurfaceHolder.Callback mCallback;
+    private ImageView mToggleFlash;
+    private int mWaterResIds[];
+    private ListView mWaterListView;
 
     private int mCurrentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
@@ -84,13 +94,91 @@ public class TakePhotoAct extends BaseAct {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
+        initViews();
+        initData();
+        initAdapter();
+        initListeners();
+    }
+
+    private void initListeners() {
+        mWaterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mWaterListView.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    private void initData() {
+        mWaterResIds = new int[]{R.drawable.water_mark_01, R.drawable.water_mark_02,
+                R.drawable.water_mark_03,
+                R.drawable.water_mark_04,
+                R.drawable.water_mark_05,
+                R.drawable.water_mark_08,
+                R.drawable.water_mark_06,
+                R.drawable.water_mark_default,
+                R.drawable.water_mark_empty,
+        };
+    }
+
+    private void initAdapter() {
+        mWaterListView.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return mWaterResIds.length;
+            }
+
+            @Override
+            public Integer getItem(int position) {
+                return mWaterResIds[position];
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return 0;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                ViewHolder holder = null;
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout
+                            .water_list_view_item, parent, false);
+                    holder = new ViewHolder(convertView);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                holder.imageView.setImageResource(getItem(position));
+                return convertView;
+            }
+        });
+    }
+
+    private static class ViewHolder {
+        public View mItem;
+        public ImageView imageView;
+
+        public ViewHolder(View root) {
+            mItem = root;
+            imageView = (ImageView) root.findViewById(R.id.water_mark);
+
+        }
+    }
+
+    private void initViews() {
+        mWaterListView = findView(R.id.water_list_view);
         mCameraCount = Camera.getNumberOfCameras();
         mSurfaceView = (SurfaceView) findViewById(R.id.suface_view);
         mSurfaceHolder = mSurfaceView.getHolder();
+        mToggleFlash = findView(R.id.toggle_flash);
+        mWaterListView = findView(R.id.water_list_view);
         mCallback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -110,6 +198,7 @@ public class TakePhotoAct extends BaseAct {
         };
         mSurfaceHolder.addCallback(mCallback);
     }
+
 
     protected void initPreview() {
         mCamera = Camera.open(mCurrentCameraId);
@@ -179,6 +268,63 @@ public class TakePhotoAct extends BaseAct {
             return;
         }
 
+    }
+
+    /**
+     * 打开或关闭闪光灯
+     *
+     * @param view
+     */
+    public void toggleBright(View view) {
+        toggleBright(mCamera);
+
+
+    }
+
+    /**
+     * 水印打开或关闭
+     *
+     * @param view
+     */
+    public void toggleWater(View view) {
+        int visibility = mWaterListView.getVisibility();
+        mWaterListView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+    }
+
+    private void toggleBright(Camera mCamera) {
+        if (mCamera == null) {
+            return;
+        }
+        Camera.Parameters parameters = mCamera.getParameters();
+        if (parameters == null) {
+            return;
+        }
+        List<String> flashModes = parameters.getSupportedFlashModes();
+        // Check if camera flash exists
+        if (flashModes == null) {
+            // Use the screen as a flashlight (next best thing)
+            return;
+        }
+        String flashMode = parameters.getFlashMode();
+        if (!Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode)) {
+            // Turn on the flash
+            if (flashModes.contains(Camera.Parameters.FLASH_MODE_TORCH)) {
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                mCamera.setParameters(parameters);
+                mToggleFlash.setSelected(true);
+
+            }
+        } else if (!Camera.Parameters.FLASH_MODE_OFF.equals(flashMode)) {
+            // Turn off the flash
+            if (flashModes.contains(Camera.Parameters.FLASH_MODE_OFF)) {
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                mCamera.setParameters(parameters);
+                mToggleFlash.setSelected(false);
+            } else {
+                Log.e(TAG, "FLASH_MODE_OFF not supported");
+            }
+        }
     }
 
     private File getOutputMediaFile(int type) {

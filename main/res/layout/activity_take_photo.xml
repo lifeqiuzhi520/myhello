@@ -9,6 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+<com.camera.www.camera.custom_view.BrightAjustView
+    android:layout_gravity="bottom"
+    android:layout_marginBottom="90dp"
+    android:layout_marginRight="25dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+</com.camera.www.camera.custom_view.BrightAjustView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +34,7 @@
                 android:id="@+id/toggle_flash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="toggleBright"
                 android:src="@drawable/icon_flash_light_selector"/>
 
             <ImageView
@@ -34,76 +43,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/toggle_flash"
+                android:onClick="toggleWater"
                 android:src="@drawable/mark"/>
 
         </RelativeLayout>
 
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <ListView
+            android:id="@+id/water_list_view"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/bottom"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/header"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:animateLayoutChanges="true"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:visibility="gone">
+        </ListView>
 
-            <LinearLayout
-                android:id="@+id/water_mark_container"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:divider="@drawable/divider_hori"
-                android:minWidth="66dp"
-                android:orientation="vertical"
-                android:showDividers="middle">
-
-                <ImageView
-                    android:id="@+id/water_mark1"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_01"/>
-
-                <ImageView
-                    android:id="@+id/water_mark2"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_02"/>
-
-                <ImageView
-                    android:id="@+id/water_mark3"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_03"/>
-
-                <ImageView
-                    android:id="@+id/water_mark4"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_04"/>
-
-                <ImageView
-                    android:id="@+id/water_mark5"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_05"/>
-
-                <ImageView
-                    android:id="@+id/water_mark8"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_08"/>
-
-                <ImageView
-                    android:id="@+id/water_mark6"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_06"/>
-
-                <ImageView
-                    android:id="@+id/water_mark7"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_default"/>
-
-
-                <ImageView
-                    android:id="@+id/water_mark9"
-                    style="@style/WaterMarkTheme"
-                    android:src="@drawable/water_mark_empty"/>
-            </LinearLayout>
-        </ScrollView>
 
         <LinearLayout
             android:id="@+id/bottom"
@@ -131,9 +88,9 @@
 
             <ImageView
                 android:id="@+id/toggle_shot"
-                android:onClick="toggleCamera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="toggleCamera"
                 android:src="@drawable/toggle_shot"/>
 
             <Space
@@ -143,10 +100,10 @@
 
             <ImageView
                 android:id="@+id/take_picture"
-                android:onClick="onPhotoClicked"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/icon_camera_take_selector"/>
+                android:background="@drawable/icon_camera_take_selector"
+                android:onClick="onPhotoClicked"/>
 
             <Space
                 android:layout_width="0dp"

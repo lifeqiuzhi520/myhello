@@ -10,7 +10,7 @@ import android.view.View;
  * we need know that 十二月
  */
 public class BaseAct extends FragmentActivity {
-    protected  String TAG;
+    protected  static String TAG;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TAG = this.getLocalClassName();
