@@ -8,6 +8,18 @@
         android:id="@+id/suface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <FrameLayout
+        android:id="@+id/auto_focus_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/auto_focus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/camera_focus_normal"/>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/bright_ajust_container"
@@ -16,7 +28,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="80dp"
         android:layout_marginLeft="27dp"
-        android:background="@drawable/light_ajust">
+        >
 
 
         <ScrollView
@@ -30,9 +42,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="0dp"
+                <ImageView
+                    android:layout_width="28dp"
                     android:layout_height="193dp"
+                    android:background="#ad46cf"
                     />
 
                 <ImageView
@@ -40,20 +53,18 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ajust_bright_dot"/>
 
-                <View
-                    android:layout_width="0dp"
+                <ImageView
+                    android:layout_width="28dp"
                     android:layout_height="193dp"
+                    android:background="#dcdcdc"
                     />
 
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/auto_focus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/camera_focus_normal"/>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"

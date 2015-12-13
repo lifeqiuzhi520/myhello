@@ -11,8 +11,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,6 +30,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import com.camera.www.camera.BaseAct;
+import com.camera.www.camera.MessageWhats;
 import com.camera.www.camera.R;
 
 import java.io.File;
@@ -36,7 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class TakePhotoAct extends BaseAct {
+public class TakePhotoAct extends BaseAct implements MessageWhats {
 
 
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -56,6 +61,8 @@ public class TakePhotoAct extends BaseAct {
     private View mBrightJustContainer;
     private ScrollView mScrollView;
     private ImageView mAutoFocusView;
+    private View mAutoFocusContainer;
+    private Handler mHandler;
 
 
     private int mCurrentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
@@ -105,10 +112,30 @@ public class TakePhotoAct extends BaseAct {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
+        initHandler();
         initViews();
         initData();
         initAdapter();
         initListeners();
+    }
+
+    private void initHandler() {
+        mHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case WHAT_START_AUTO_FOCUS:
+                        mAutoFocusView.setVisibility(View.VISIBLE);
+                        Log.d(TAG, "handleMessage:  mAutoFocusContainer.setVisibility(View" +
+                                ".VISIBLE);");
+                        break;
+                    case WHAT_AUTO_FOCUS_COMPLETE_SUCCES:
+                        mAutoFocusView.setVisibility(View.INVISIBLE);
+                        Log.d(TAG, "handleMessage:WHAT_AUTO_FOCUS_COMPLETE_SUCCES ");
+                        break;
+                }
+            }
+        };
     }
 
     private void initListeners() {
@@ -116,6 +143,29 @@ public class TakePhotoAct extends BaseAct {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mWaterListView.setVisibility(View.GONE);
+            }
+        });
+        mAutoFocusContainer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_UP) {
+                    int[] location = new int[2];
+                    Log.d(TAG, "onTouch: location" + location[0] + "location 1 " + location[1]);
+                    mAutoFocusView.getLocationOnScreen(location);
+                    int Xoffset = (int) (event.getX() - location[0]);
+                    int Yoffset = (int) (event.getY() - location[1]);
+                    int height = mAutoFocusView.getHeight();
+                    int width = mAutoFocusView.getWidth();
+                    Xoffset = Xoffset - width / 2;
+                    Yoffset = Yoffset - height / 2;
+                    mAutoFocusView.offsetLeftAndRight(Xoffset);
+                    mAutoFocusView.offsetTopAndBottom(Yoffset);
+                    startAutoFocus();
+                    return true;
+                }
+                return true;
+
             }
         });
     }
@@ -178,7 +228,9 @@ public class TakePhotoAct extends BaseAct {
     }
 
     private void initViews() {
+        mAutoFocusView = findView(R.id.auto_focus);
         mWaterListView = findView(R.id.water_list_view);
+        mAutoFocusContainer = findView(R.id.auto_focus_container);
         mAutoFocusView = findView(R.id.auto_focus);
         mBrightJustContainer = findView(R.id.bright_ajust_container);
         mScrollView = findView(R.id.bright_scroll_view);
@@ -208,20 +260,32 @@ public class TakePhotoAct extends BaseAct {
     }
 
 
-    private void addFocus() {
+    private void startAutoFocus() {
+        mHandler.sendEmptyMessage(WHAT_START_AUTO_FOCUS);
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        mCamera.setParameters(parameters);
         mCamera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
-                initCamera();
+                if (success) {
+                    onAutoFocusSeccess();
+                }
             }
         });
+    }
+
+    private void onAutoFocusSeccess() {
+        mHandler.removeMessages(WHAT_AUTO_FOCUS_COMPLETE_SUCCES);
+        mHandler.sendEmptyMessageDelayed(WHAT_AUTO_FOCUS_COMPLETE_SUCCES, 500);
+//        mHandler.sendEmptyMessage(WHAT_AUTO_FOCUS_COMPLETE_SUCCES);
     }
 
     private void initCamera() {
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPictureFormat(ImageFormat.JPEG);
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         mCamera.setParameters(parameters);
+        startAutoFocus();
     }
 
     protected void initPreview() {
@@ -234,7 +298,6 @@ public class TakePhotoAct extends BaseAct {
         }
         setCameraDisplayOrientation(this, mCurrentCameraId, mCamera);
         mCamera.startPreview();
-        mCamera.cancelAutoFocus();
     }
 
     protected void releaseCamera() {
