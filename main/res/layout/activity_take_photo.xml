@@ -31,7 +31,7 @@
         >
 
 
-        <ScrollView
+        <com.camera.www.camera.custom_view.ObservableScrollView
             android:id="@+id/bright_scroll_view"
             android:layout_width="30dp"
             android:layout_height="225dp"
@@ -60,7 +60,7 @@
                     />
 
             </LinearLayout>
-        </ScrollView>
+        </com.camera.www.camera.custom_view.ObservableScrollView>
     </FrameLayout>
 
 

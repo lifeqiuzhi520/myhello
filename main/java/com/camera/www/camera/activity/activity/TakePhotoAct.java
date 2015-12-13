@@ -22,16 +22,18 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 
 import com.camera.www.camera.BaseAct;
 import com.camera.www.camera.MessageWhats;
 import com.camera.www.camera.R;
+import com.camera.www.camera.custom_view.ObservableScrollView;
+import com.camera.www.camera.interfaces.ScrollViewListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +61,7 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
     private int mWaterResIds[];
     private ListView mWaterListView;
     private View mBrightJustContainer;
-    private ScrollView mScrollView;
+    private ObservableScrollView mScrollView;
     private ImageView mAutoFocusView;
     private View mAutoFocusContainer;
     private Handler mHandler;
@@ -106,6 +108,7 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
             }
         }
     };
+    private int mBrightCounts;
 
 
     @Override
@@ -166,6 +169,14 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
                 }
                 return true;
 
+            }
+        });
+        mBrightCounts = mScrollView.getMaxScrollAmount();
+        mScrollView.setScrollViewListener(new ScrollViewListener() {
+            @Override
+            public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx,
+                                        int oldy) {
+                ajustBright(Math.abs(x - oldx));
             }
         });
     }
@@ -339,6 +350,12 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
             result = (info.orientation - degrees + 360) % 360;
         }
         camera.setDisplayOrientation(result);
+    }
+
+    private void ajustBright(int ajustValue) {
+        WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.screenBrightness = ajustValue / mBrightCounts;
+        getWindow().setAttributes(attributes);
     }
 
     public void onPhotoClicked(View view) {
