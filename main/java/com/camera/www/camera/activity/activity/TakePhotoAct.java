@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -71,44 +74,65 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
 
         @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            Log.d(TAG, "onPictureTaken");
-            mPhotoFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (mPhotoFile == null) {
-                Log.d(TAG, "Error creating media file, check storage permissions: ");
-                return;
-            }
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        public void onPictureTaken(final byte[] data, Camera camera) {
+            new AsyncTask<Void, Void, Void>(
 
-            try {
-                FileOutputStream fos = new FileOutputStream(mPhotoFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);//
-                fos.flush();
-                fos.close();
-                Log.d(TAG, "save picture success");
-                //notify
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    Intent mediaScanIntent = new Intent(
-                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(mPhotoFile); //out is your output file
-                    mediaScanIntent.setData(contentUri);
-                    TakePhotoAct.this.sendBroadcast(mediaScanIntent);
-                } else {
-                    sendBroadcast(new Intent(
-                            Intent.ACTION_MEDIA_MOUNTED,
-                            Uri.parse("file://"
-                                    + Environment.getExternalStorageDirectory())));
+            ) {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    Log.d(TAG, "onPictureTaken");
+                    mPhotoFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+                    if (mPhotoFile == null) {
+                        Log.d(TAG, "Error creating media file, check storage permissions: ");
+                        return null;
+                    }
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream(mPhotoFile);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);//
+                        int degree = CameraUtils.readPictureDegree(mPhotoFile.getAbsolutePath());
+                        Matrix matrix = new Matrix();
+                        matrix.setRotate(degree);
+                        bitmap = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap
+                                        .getHeight(),
+                                matrix,true);
+                        fos.flush();
+                        fos.close();
+                        mPhotoFile.delete();
+                        fos = new FileOutputStream(mPhotoFile);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);//
+                        fos.flush();
+                        fos.close();
+                        Log.d(TAG, "save picture success");
+
+                        //notify
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            Intent mediaScanIntent = new Intent(
+                                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            Uri contentUri = Uri.fromFile(mPhotoFile); //out is your output file
+                            mediaScanIntent.setData(contentUri);
+                            TakePhotoAct.this.sendBroadcast(mediaScanIntent);
+                        } else {
+                            sendBroadcast(new Intent(
+                                    Intent.ACTION_MEDIA_MOUNTED,
+                                    Uri.parse("file://"
+                                            + Environment.getExternalStorageDirectory())));
+                        }
+                    } catch (FileNotFoundException e) {
+                        Log.d(TAG, "File not found: " + e.getMessage());
+                    } catch (IOException e) {
+                        Log.d(TAG, "Error accessing file: " + e.getMessage());
+                    }
+                    return null;
                 }
-                releaseCamera();
-                initPreview();
-            } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
-            }
+            }.execute();
+
+            releaseCamera();
+            initPreview();
+
         }
     };
-    private int mBrightCounts;
 
 
     @Override
@@ -171,12 +195,11 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
 
             }
         });
-        mBrightCounts = mScrollView.getMaxScrollAmount();
         mScrollView.setScrollViewListener(new ScrollViewListener() {
             @Override
             public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx,
                                         int oldy) {
-                ajustBright(Math.abs(x - oldx));
+                ajustBright(y);
             }
         });
     }
@@ -295,7 +318,28 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
     private void initCamera() {
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPictureFormat(ImageFormat.JPEG);
+           /*获取摄像头支持的PictureSize列表*/
+        List<Camera.Size> pictureSizeList = parameters.getSupportedPictureSizes();
+  /*从列表中选取合适的分辨率*/
+        Camera.Size picSize = CameraUtils.getProperSize(pictureSizeList, ((float) getWindow()
+                .getAttributes().width)
+                / getWindow().getAttributes().height);
+        if (null != picSize) {
+            parameters.setPictureSize(picSize.width, picSize.height);
+        } else {
+            picSize = parameters.getPictureSize();
+        }
+
+        /*根据选出的PictureSize重新设置SurfaceView大小*/
+        float w = picSize.width;
+        float h = picSize.height;
+        mSurfaceView.setLayoutParams(new FrameLayout.LayoutParams((int) (getWindow()
+                .getAttributes().height * (w / h)),
+                getWindow().getAttributes().height));
+        parameters.setJpegQuality(100); // 设置照片质量
+
         mCamera.setParameters(parameters);
+        mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);//设置类型
         startAutoFocus();
     }
 
@@ -353,8 +397,9 @@ public class TakePhotoAct extends BaseAct implements MessageWhats {
     }
 
     private void ajustBright(int ajustValue) {
+        Log.d(TAG, "ajustBright: ajust value = " + ajustValue);
         WindowManager.LayoutParams attributes = getWindow().getAttributes();
-        attributes.screenBrightness = ajustValue / mBrightCounts;
+        attributes.screenBrightness = ajustValue * 1.0f / 382;
         getWindow().setAttributes(attributes);
     }
 
